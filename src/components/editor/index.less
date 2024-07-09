@@ -1,0 +1,60 @@
+.tiptap {
+  outline: none;
+  letter-spacing: 0.05em;
+
+  pre {
+    background-color: #fff;
+    border-radius: 4px;
+    margin: 16px 0;
+    padding: 16px;
+
+    code {
+      color: #000;
+      font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 0;
+      white-space: pre-wrap;
+    }
+  }
+
+  code {
+    color: #000;
+    background-color: #fff;
+    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 0;
+    white-space: pre-wrap;
+    padding: 4px 8px;
+  }
+
+  ul[data-type='taskList'] {
+    list-style: none;
+    margin-left: 0;
+    padding: 0;
+
+    li {
+      align-items: flex-start;
+      display: flex;
+
+      > label {
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        user-select: none;
+      }
+
+      > div {
+        flex: 1 1 auto;
+      }
+    }
+
+    input[type='checkbox'] {
+      cursor: pointer;
+    }
+
+    ul[data-type='taskList'] {
+      margin: 0;
+    }
+  }
+}

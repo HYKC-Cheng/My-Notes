@@ -1,0 +1,49 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--theme-font-color);
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--theme-background-color-base);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+  width: 4px; /* 滚动条宽度 */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f7f1e3; /* 滚动条轨道颜色（浅色系） */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #aaa69d; /* 滚动条滑块颜色 */
+  border-radius: 4px; /* 滑块圆角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #84817a; /* 鼠标悬停时滑块颜色 */
+}
