@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { LOCAL_STORAGE_KEY } from '@/store/const';
+import type { RootState } from '@/store';
+import { fork } from 'child_process';
 
 export interface NoteState {
   key: string;
   title: string;
   content?: string;
   children?: NoteState[];
+  [key: string]: any;
 }
 
 const initialState: NoteState = JSON.parse(
@@ -13,6 +16,7 @@ const initialState: NoteState = JSON.parse(
 ) || {
   key: 'root',
   title: 'root',
+  selectedKey: 'Note 01',
   children: [{ key: 'Note 01', title: 'Note 01', content: 'hello world !' }],
 };
 
@@ -25,8 +29,33 @@ export const noteSlice = createSlice({
   initialState,
   reducers: {
     // 添加
-    addNote: (state, action: PayloadAction<NoteState>) => {
-      state.children = [...(state.children || []), action.payload];
+    addNote: (
+      state,
+      action: PayloadAction<{ data: NoteState; key?: string }>,
+    ) => {
+      const cloneData = [...(state.children || [])];
+      if (action.payload.key) {
+        cloneData.some((item) => {
+          if (item.key === action.payload.key) {
+            item.children = [
+              ...(item.children || []),
+              ...[action.payload.data],
+            ];
+            return true;
+          }
+        });
+
+        state.children = [...cloneData];
+      } else {
+        state.children = [...cloneData, ...[action.payload.data]];
+      }
+
+      console.log(action.payload.data, 111);
+
+      state.selectedKey = action.payload.data.children
+        ? action.payload.data.children[action.payload.data.children.length - 1]
+            .key
+        : action.payload.data.key;
       save(state);
     },
 
@@ -80,21 +109,40 @@ export const noteSlice = createSlice({
       const cloneData = [...(state.children || [])];
       deleteChild(cloneData);
       state.children = cloneData;
+      state.selectedKey = cloneData[0]?.children
+        ? cloneData[0]?.children[0].key
+        : cloneData[0].key;
+
+      save(state);
+    },
+
+    // 选择
+    selectNote: (state, action: PayloadAction<string>) => {
+      state.selectedKey = action.payload;
       save(state);
     },
   },
 });
 
-export const { addNote, updateNote, deleteNote } = noteSlice.actions;
+export const { addNote, updateNote, deleteNote, selectNote } =
+  noteSlice.actions;
 
-export const getNoteByKey = (note: NoteState, key: string) => {
-  const getContent = (data: NoteState[]): NoteState | undefined =>
-    data?.find((item) => {
+export const getNoteByKey = (state: RootState) => {
+  const note = state.note;
+
+  const key = note.selectedKey;
+
+  const getContent = (data: NoteState[]): NoteState | undefined => {
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
       if (item.children) {
         return getContent(item.children);
       }
-      return item.key === key;
-    });
+      if (item.key === key) {
+        return item;
+      }
+    }
+  };
 
   return getContent(note.children || []);
 };

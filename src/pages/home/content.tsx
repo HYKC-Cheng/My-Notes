@@ -1,39 +1,12 @@
-import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Editor } from '@/components';
-import { updateNote, getNoteByKey } from '@/store/slice/note-slice';
 
 import styles from './index.module.less';
 
-import type { RootState } from '@/store';
-
-interface ContentProps {
-  propKey: string;
-}
-
-const Content: React.FC<ContentProps> = (props) => {
-  const { propKey } = props;
-
-  const dispatch = useDispatch();
-  const noteData = useSelector((state: RootState) => state.note);
-
-  const content = useMemo(
-    () => getNoteByKey(noteData, propKey)?.content || '',
-    [propKey],
-  );
-
-  const handleChange = (html: string) => {
-    dispatch(
-      updateNote({
-        key: propKey,
-        changeValue: { content: html },
-      }),
-    );
-  };
-
+const Content: React.FC = () => {
   return (
     <div className={styles.content}>
-      <Editor onUpdate={handleChange} content={content} />
+      <Editor />
     </div>
   );
 };
