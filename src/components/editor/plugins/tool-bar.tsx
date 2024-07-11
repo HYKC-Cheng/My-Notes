@@ -1,5 +1,4 @@
 import React from 'react';
-import { useCurrentEditor } from '@tiptap/react';
 import type { Editor } from '@tiptap/react';
 import { Button, Tooltip, Flex, Divider } from 'antd';
 import {

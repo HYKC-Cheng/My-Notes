@@ -28,9 +28,13 @@ const { Paragraph } = Typography;
 
 const Slider: React.FC = () => {
   const noteData = useSelector((state: RootState) => state.note);
+  const selectedKey = useSelector((state: RootState) => state.note.selectedKey);
+
   const dispatch = useDispatch();
 
   const [editedStatus, setEditedStatus] = useState<EditedStatus>({});
+
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
 
   useEffect(() => {
     const result: EditedStatus = {};
@@ -47,6 +51,41 @@ const Slider: React.FC = () => {
     getResult(noteData.children || []);
     setEditedStatus(result);
   }, [noteData]);
+
+  useEffect(() => {
+    setOpenKeys(
+      (noteData.children || [])
+        .filter((item) => item.children)
+        .map((item) => item.key),
+    );
+  }, []);
+
+  useEffect(() => {
+    if (Object.values(editedStatus).some((item) => item)) {
+      return;
+    }
+
+    let result = '';
+
+    const getParentKey = (
+      data: Array<RootState['note']>,
+      parentKey: string = '',
+    ) => {
+      data.some((item) => {
+        if (item.key === selectedKey) {
+          result = parentKey;
+          return true;
+        }
+
+        if (item.children) {
+          return getParentKey(item.children, item.key);
+        }
+      });
+    };
+
+    getParentKey(noteData.children || []);
+    result && setOpenKeys((pre) => [...pre, result]);
+  }, [selectedKey, noteData]);
 
   const menuItems = useMemo(() => {
     const getMenuItems = (data: RootState['note'][]) => {
@@ -179,6 +218,13 @@ const Slider: React.FC = () => {
   return (
     <div style={{ position: 'relative' }}>
       <Menu
+        openKeys={openKeys}
+        onOpenChange={(curOpenKeys) => {
+          if (Object.values(editedStatus).some((item) => item)) {
+            return;
+          }
+          setOpenKeys(curOpenKeys);
+        }}
         defaultOpenKeys={noteData.children
           ?.filter((item) => item.children && item.children.length > 0)
           .map((item) => item.key)}

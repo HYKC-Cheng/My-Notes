@@ -50,8 +50,6 @@ export const noteSlice = createSlice({
         state.children = [...cloneData, ...[action.payload.data]];
       }
 
-      console.log(action.payload.data, 111);
-
       state.selectedKey = action.payload.data.children
         ? action.payload.data.children[action.payload.data.children.length - 1]
             .key
