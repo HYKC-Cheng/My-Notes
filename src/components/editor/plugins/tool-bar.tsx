@@ -224,7 +224,9 @@ const ToolBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
 
       <Tooltip title='代码块'>
         <Button
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          onClick={() =>
+            (editor.chain().focus() as any).toggleCustomCodeBlock().run()
+          }
           type={editor.isActive('codeBlock') ? 'primary' : 'text'}
           icon={<CodeOutlined />}
         />

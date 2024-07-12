@@ -13,6 +13,7 @@ import StarterKit from '@tiptap/starter-kit';
 import ToolBar from './plugins/tool-bar';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateNote, getNoteByKey } from '@/store/slice/note-slice';
+import CodeBlockWithCopy from './plugins/custom-code-block';
 import type { RootState } from '@/store';
 
 import './index.less';
@@ -29,6 +30,7 @@ const extensions = [
       keepMarks: true,
       keepAttributes: false,
     },
+    codeBlock: false,
   }),
   Underline,
   TextAlign.configure({
@@ -38,6 +40,7 @@ const extensions = [
   TaskItem.configure({
     nested: true,
   }),
+  CodeBlockWithCopy,
 ];
 
 const Editor: React.FC = () => {

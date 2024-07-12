@@ -7,6 +7,13 @@
     border-radius: 4px;
     margin: 16px 0;
     padding: 16px;
+    position: relative;
+
+    &:hover {
+      .copy-button {
+        opacity: 1;
+      }
+    }
 
     code {
       color: #000;
@@ -15,6 +22,20 @@
       line-height: 1.5;
       padding: 0;
       white-space: pre-wrap;
+    }
+
+    .copy-button {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      cursor: pointer;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      caret-color: transparent;
+      color: #333;
+      font-size: 12px;
+      font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
     }
   }
 

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
-import { LOCAL_STORAGE_KEY } from '@/store/const';
+import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_SELECTED_KEY } from '@/store/const';
 import type { RootState } from '@/store';
 
 export interface NoteState {
@@ -18,7 +18,7 @@ export interface NoteStateConfig {
 }
 
 const initialState: NoteStateConfig = {
-  selectedKey: 'Note 01',
+  selectedKey: localStorage.getItem(LOCAL_STORAGE_SELECTED_KEY) || 'Note 01',
   refreshFlag: 0,
   children: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null') || [
     {
@@ -31,6 +31,7 @@ const initialState: NoteStateConfig = {
 
 const save = (state: NoteStateConfig) => {
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state.children));
+  localStorage.setItem(LOCAL_STORAGE_SELECTED_KEY, state.selectedKey);
 };
 
 export const noteSlice = createSlice({
