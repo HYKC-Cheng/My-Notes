@@ -1,4 +1,4 @@
-![demo](./demo/demo.png)
+![image](/demo/demo.png)
 
 ## Feature：
 
