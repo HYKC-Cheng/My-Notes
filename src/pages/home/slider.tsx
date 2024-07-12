@@ -38,7 +38,7 @@ const Slider: React.FC = () => {
 
   useEffect(() => {
     const result: EditedStatus = {};
-    const getResult = (data: Array<RootState['note']>) => {
+    const getResult = (data: RootState['note']['children']) => {
       data.forEach((item) => {
         if (item?.children) {
           getResult(item.children);
@@ -68,7 +68,7 @@ const Slider: React.FC = () => {
     let result = '';
 
     const getParentKey = (
-      data: Array<RootState['note']>,
+      data: RootState['note']['children'],
       parentKey: string = '',
     ) => {
       data.some((item) => {
@@ -88,7 +88,7 @@ const Slider: React.FC = () => {
   }, [selectedKey, noteData]);
 
   const menuItems = useMemo(() => {
-    const getMenuItems = (data: RootState['note'][]) => {
+    const getMenuItems = (data: RootState['note']['children']) => {
       const menuItems: MenuProps['items'] = [];
 
       data.forEach((item) => {

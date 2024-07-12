@@ -18,13 +18,19 @@ import {
   DashOutlined,
   FontColorsOutlined,
   CheckSquareOutlined,
+  ImportOutlined,
+  ExportOutlined,
 } from '@ant-design/icons';
+import { downloadJson, readJson } from '@/utils';
+import { LOCAL_STORAGE_KEY } from '@/store/const';
 import { themeConfig } from '@/styles/config';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { refresh } from '@/store/slice/note-slice';
 
 import type { RootState } from '@/store';
 
 const ToolBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
+  const dispatch = useDispatch();
   const themeType = useSelector((state: RootState) => state.theme.theme);
 
   if (!editor) {
@@ -221,6 +227,33 @@ const ToolBar: React.FC<{ editor: Editor | null }> = ({ editor }) => {
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           type={editor.isActive('codeBlock') ? 'primary' : 'text'}
           icon={<CodeOutlined />}
+        />
+      </Tooltip>
+
+      <Divider style={{ fontSize: '24px', color: '#000' }} type='vertical' />
+
+      <Tooltip title='导入'>
+        <Button
+          onClick={() => {
+            readJson().then((res) => {
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(res));
+              dispatch(refresh());
+            });
+          }}
+          type='text'
+          icon={<ImportOutlined />}
+        />
+      </Tooltip>
+
+      <Tooltip title='导出'>
+        <Button
+          onClick={() =>
+            downloadJson(
+              JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}'),
+            )
+          }
+          type='text'
+          icon={<ExportOutlined />}
         />
       </Tooltip>
     </Flex>

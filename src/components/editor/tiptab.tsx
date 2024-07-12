@@ -43,6 +43,7 @@ const extensions = [
 const Editor: React.FC = () => {
   const dispatch = useDispatch();
   const selectedKey = useSelector((state: RootState) => state.note.selectedKey);
+  const refreshFlag = useSelector((state: RootState) => state.note.refreshFlag);
   const content = useSelector(getNoteByKey)?.content || '';
 
   const handleUpdate = (props: EditorEvents['update']) => {
@@ -61,7 +62,7 @@ const Editor: React.FC = () => {
       content: content || '',
       onUpdate: handleUpdate,
     },
-    [selectedKey],
+    [selectedKey, refreshFlag],
   );
 
   useEffect(() => {
@@ -69,7 +70,7 @@ const Editor: React.FC = () => {
   }, [editor]);
 
   return (
-    <Space direction='vertical' size='large'>
+    <Space style={{ width: '100%' }} direction='vertical' size='large'>
       <ToolBar editor={editor} />
       <EditorContent editor={editor} />
     </Space>

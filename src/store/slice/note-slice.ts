@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
 import { LOCAL_STORAGE_KEY } from '@/store/const';
 import type { RootState } from '@/store';
-import { fork } from 'child_process';
 
 export interface NoteState {
   key: string;
@@ -11,17 +11,26 @@ export interface NoteState {
   [key: string]: any;
 }
 
-const initialState: NoteState = JSON.parse(
-  localStorage.getItem(LOCAL_STORAGE_KEY) || 'null',
-) || {
-  key: 'root',
-  title: 'root',
+export interface NoteStateConfig {
+  children: NoteState[];
+  selectedKey: string;
+  refreshFlag: number;
+}
+
+const initialState: NoteStateConfig = {
   selectedKey: 'Note 01',
-  children: [{ key: 'Note 01', title: 'Note 01', content: 'hello world !' }],
+  refreshFlag: 0,
+  children: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null') || [
+    {
+      key: 'Note 01',
+      title: 'Note 01',
+      content: 'hello world !',
+    },
+  ],
 };
 
-const save = (state: NoteState) => {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state));
+const save = (state: NoteStateConfig) => {
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state.children));
 };
 
 export const noteSlice = createSlice({
@@ -119,10 +128,20 @@ export const noteSlice = createSlice({
       state.selectedKey = action.payload;
       save(state);
     },
+
+    // 刷新
+    refresh: (state) => {
+      const newState = JSON.parse(
+        localStorage.getItem(LOCAL_STORAGE_KEY) || 'null',
+      );
+
+      state.children = [...newState];
+      state.refreshFlag = dayjs().valueOf();
+    },
   },
 });
 
-export const { addNote, updateNote, deleteNote, selectNote } =
+export const { addNote, updateNote, deleteNote, selectNote, refresh } =
   noteSlice.actions;
 
 export const getNoteByKey = (state: RootState) => {
