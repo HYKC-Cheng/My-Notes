@@ -57,6 +57,7 @@ const Column: React.FC<ColumnProps> = (props) => {
       })}
       onClick={(e) => {
         e.stopPropagation();
+        if (isGroup) return;
         dispatch(selectNote(id));
       }}
     >

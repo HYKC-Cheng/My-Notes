@@ -158,15 +158,23 @@ export const getNoteByKey = (state: RootState) => {
   const key = note.selectedKey;
 
   const getContent = (data: NoteState[]): NoteState | undefined => {
-    for (let i = 0; i < data.length; i++) {
-      const item = data[i];
-      if (item.children) {
-        return getContent(item.children);
+    let result;
+
+    data.some((item) => {
+      if (!item?.children) {
+        if (item.key === key) {
+          result = item;
+          return true;
+        }
+      } else {
+        result = getContent(item.children);
+        if (result) {
+          return true;
+        }
       }
-      if (item.key === key) {
-        return item;
-      }
-    }
+    });
+
+    return result;
   };
 
   return getContent(note.children || []);

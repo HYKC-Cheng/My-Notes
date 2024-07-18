@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { ReactSortable } from 'react-sortablejs';
 import { Tooltip, Button } from 'antd';
 import { PlusOutlined, FolderAddOutlined } from '@ant-design/icons';
-import { NoteState, addNote, reset } from '@/store/slice/note-slice';
+import {
+  NoteState,
+  addNote,
+  reset,
+  updateNote,
+} from '@/store/slice/note-slice';
 import type { RootState } from '@/store';
 import { useSelector, useDispatch } from 'react-redux';
 import Column from './column';
@@ -20,6 +25,7 @@ interface DragDropProps {
   list: NoteState[];
   isChild?: boolean;
   hoverDisable?: boolean;
+  parentKey?: string;
 }
 
 const DragDrop: React.FC<DragDropProps> = (props) => {
@@ -27,6 +33,7 @@ const DragDrop: React.FC<DragDropProps> = (props) => {
     list: propList,
     isChild,
     hoverDisable: curHoverDisable = false,
+    parentKey,
   } = props;
 
   const [list, setList] = useState<Item[]>([]);
@@ -50,13 +57,23 @@ const DragDrop: React.FC<DragDropProps> = (props) => {
     setList(getData(propList));
   }, [propList]);
 
-  const handleSetList = (list: Item[]) => {
-    console.log('propList', propList);
-    if (list.length !== propList.length) return;
-    setList(list);
-    dispatch(reset(list.map((item) => item.origin)));
+  const handleSetList = (curList: Item[]) => {
+    if (!curList || !curList.length) return;
+
+    setList(curList);
+    if (parentKey) {
+      dispatch(
+        updateNote({
+          key: parentKey,
+          changeValue: {
+            children: curList.map((item) => item.origin),
+          },
+        }),
+      );
+      return;
+    }
+    dispatch(reset(curList.map((item) => item.origin)));
   };
-  console.log('list', list);
 
   return (
     <ReactSortable
@@ -80,6 +97,7 @@ const DragDrop: React.FC<DragDropProps> = (props) => {
             <DragDrop
               list={item.origin.children || []}
               isChild
+              parentKey={item.id}
               hoverDisable={hoverDisable}
             />
           )}
