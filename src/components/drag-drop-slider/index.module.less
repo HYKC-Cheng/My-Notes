@@ -1,0 +1,65 @@
+.column {
+  width: 100%;
+  height: 40px;
+  margin: 4px;
+  padding: 0 16px 0 24px;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover:not(.hoverDisable) {
+    background-color: #ebe6d9;
+    transition: all 0.3s;
+
+    .icons {
+      opacity: 1;
+    }
+  }
+
+  &&Selected {
+    background-color: #c0ccc7;
+  }
+
+  &&Child {
+    padding-left: 48px;
+  }
+
+  .title {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    transition: all 0.2s;
+
+    :global {
+      textarea {
+        background: #f7f1e3;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        padding-left: 32px;
+        line-height: 24px;
+      }
+    }
+  }
+  .icons {
+    opacity: 0;
+    min-width: 0;
+    transition: all 0.2s;
+  }
+}
+
+.slider {
+  box-sizing: border-box;
+  width: 300px;
+  padding: 48px 0 32px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  background-color: #f7f1e3;
+  position: relative;
+
+  .newButtons {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    right: 24px;
+  }
+}

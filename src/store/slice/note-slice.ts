@@ -139,10 +139,17 @@ export const noteSlice = createSlice({
       state.children = [...newState];
       state.refreshFlag = dayjs().valueOf();
     },
+
+    // 全量设置
+    reset: (state, action: PayloadAction<NoteState['children']>) => {
+      if (!action.payload || !action.payload.length) return;
+      state.children = action.payload;
+      save(state);
+    },
   },
 });
 
-export const { addNote, updateNote, deleteNote, selectNote, refresh } =
+export const { addNote, updateNote, deleteNote, selectNote, refresh, reset } =
   noteSlice.actions;
 
 export const getNoteByKey = (state: RootState) => {

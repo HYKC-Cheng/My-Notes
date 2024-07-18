@@ -1,16 +1,17 @@
 {
   "name": "note",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build",
+    "dev": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
+    "@hello-pangea/dnd": "^16.6.0",
     "@reduxjs/toolkit": "^2.2.6",
     "@tiptap/core": "^2.4.0",
     "@tiptap/extension-code-block": "^2.4.0",
@@ -29,9 +30,10 @@
     "classnames": "^2.5.1",
     "dayjs": "^1.11.11",
     "react": "^18.2.0",
-    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
-    "react-redux": "^9.1.2"
+    "react-redux": "^9.1.2",
+    "react-sortablejs": "^6.1.4",
+    "sortablejs": "^1.15.2"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",
